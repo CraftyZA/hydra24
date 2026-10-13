@@ -1,0 +1,46 @@
+*, *::before, *::after { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  height: 100%;
+  background: #0d0d0d;
+  color: #e6e6e6;
+  font-family: system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+/* Exactly one screen tall; the images share whatever height is left. */
+.landing {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.5rem;
+  height: 100vh;
+  height: 100dvh;
+  max-width: 640px;
+  margin: 0 auto;
+  padding: 1.5rem 16px;
+  overflow: hidden;
+  text-align: center;
+}
+
+.landing img {
+  display: block;
+  width: 100%;
+  min-height: 0;
+  object-fit: contain;
+}
+
+/* Both keep their natural size and shrink only when the screen is too short;
+   the banner never takes more than 30% of the height. */
+.construction { flex: 0 1 auto; max-height: 30%; }
+.hero         { flex: 0 1 auto; }
+
+.landing p {
+  flex: none;
+  margin: 0;
+  font-size: 1.15rem;
+  line-height: 1.6;
+}
+
+.landing p:empty { display: none; }
