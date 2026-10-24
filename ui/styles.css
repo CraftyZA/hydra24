@@ -29,7 +29,9 @@ body {
   border-bottom: 1px solid #1a1a1a;
 }
 
-.titlebar-home {
+/* Icon buttons: the title bar's home button and the back button. */
+.titlebar-home,
+.back-button {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -40,7 +42,9 @@ body {
 }
 
 .titlebar-home:hover,
-.titlebar-home:focus-visible {
+.titlebar-home:focus-visible,
+.back-button:hover,
+.back-button:focus-visible {
   background: #111;
   outline: none;
 }
@@ -79,13 +83,26 @@ body {
   object-fit: contain;
 }
 
-/* Sponsor carousel: same 1170x250 shape as the menu buttons, slides stacked
-   and cross-faded. Pushed to the bottom of the screen by its top margin. */
-.carousel {
-  flex: 0 1 auto;
-  margin-top: auto;
+/* Bottom row on every page: back button (except on the landing page) and the
+   sponsor carousel. Pushed to the bottom of the screen by its top margin. */
+.page-footer {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 8px;
   width: 100%;
-  min-height: 0;
+  margin-top: auto;
+}
+
+.back-button {
+  flex: none;
+}
+
+/* Sponsor carousel: same 1170x250 shape as the menu buttons, slides stacked
+   and cross-faded. Takes whatever width the back button leaves. */
+.carousel {
+  flex: 1;
+  min-width: 0;
   aspect-ratio: 1170 / 250;
   max-height: 110px;
 }

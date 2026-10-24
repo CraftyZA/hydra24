@@ -10,7 +10,8 @@ MouseScoring's VPC and Postgres instance to keep AWS costs low.
 - `backend/` - backend service (not started).
 - `ui/` - static site, S3 + CloudFront (OAC). Each landing-menu section has its
   own folder holding its page and sub pages, e.g. `ui/events/events.html`,
-  `ui/events/calendar.html`. Shared JS lives in `ui/common/`. Use root-absolute
+  `ui/events/calendar.html`. The back button works out the parent page from
+  this layout. Shared JS lives in `ui/common/`. Use root-absolute
   paths (`/styles.css`, `/images/...`) so pages work at any depth.
 - `docs/` - design notes. Read `docs/shared_infrastructure.md` before touching
   anything network or database related.
