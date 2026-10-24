@@ -73,6 +73,7 @@ should follow. Read it; don't change it from here.
   that do one thing, no side effects hidden behind names, few arguments, no dead
   or commented-out code, and comments only where the code can't explain itself.
   Leave code cleaner than you found it.
+- Ask yourself: "Would a senior engineer say this is overcomplicated?" If yes, simplify. 
 - **Security first.**
   - No secrets in the repo. Use Secrets Manager or SSM.
   - Give IAM and security groups least privilege.

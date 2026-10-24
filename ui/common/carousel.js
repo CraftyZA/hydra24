@@ -1,13 +1,20 @@
 // ============================================================================
 // CAROUSEL
-// Fills every .carousel on the page from DEFAULT_CAROUSEL (common/config.js)
-// and cross-fades through the items. The page ships with the first slide in
-// its HTML, so it still shows something if this script never runs.
+// Sponsor carousel built from DEFAULT_CAROUSEL (common/config.js), cross-fading
+// through the items. Include it, without defer, where the carousel should
+// appear:
+//   <script src="/common/carousel.js"></script>
+// The script tag is replaced with the carousel. Load common/config.js in
+// <head>, without defer, before it.
 // ============================================================================
 
 (function () {
+    const script = document.currentScript;
     const config = typeof DEFAULT_CAROUSEL !== 'undefined' ? DEFAULT_CAROUSEL : null;
-    if (!config || !config.items || config.items.length === 0) return;
+    if (!config || !config.items || config.items.length === 0) {
+        script.remove();
+        return;
+    }
 
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
@@ -31,14 +38,20 @@
         return slide;
     }
 
-    document.querySelectorAll('.carousel').forEach(function (carousel) {
-        const track = carousel.querySelector('.carousel-track');
-        if (!track) return;
+    function buildCarousel(slides) {
+        const track = document.createElement('div');
+        track.className = 'carousel-track';
+        track.append.apply(track, slides);
 
-        const slides = config.items.map(buildSlide);
-        track.replaceChildren.apply(track, slides);
-        if (slides.length < 2) return;
+        const carousel = document.createElement('section');
+        carousel.className = 'carousel';
+        carousel.setAttribute('aria-label', 'Sponsors');
+        carousel.setAttribute('aria-roledescription', 'carousel');
+        carousel.appendChild(track);
+        return carousel;
+    }
 
+    function rotate(carousel, slides) {
         let current = 0;
         let timer = null;
 
@@ -72,5 +85,10 @@
         carousel.addEventListener('focusout', start);
 
         start();
-    });
+    }
+
+    const slides = config.items.map(buildSlide);
+    const carousel = buildCarousel(slides);
+    script.replaceWith(carousel);
+    if (slides.length > 1) rotate(carousel, slides);
 })();
