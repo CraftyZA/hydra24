@@ -17,11 +17,11 @@ terraform -chdir="$IAC_DIR" apply -input=false
 S3_BUCKET=$(terraform -chdir="$IAC_DIR" output -raw hydra24_site_bucket)
 CLOUDFRONT_DIST_ID=$(terraform -chdir="$IAC_DIR" output -raw hydra24_site_distribution_id)
 
-# Step 2: Upload. HTML/CSS revalidate every load; images get a day.
+# Step 2: Upload. HTML/CSS/JS revalidate every load; images get a day.
 echo ""
 echo "Step 2/2: Uploading $UI_DIR to s3://$S3_BUCKET/ ..."
 aws s3 sync "$UI_DIR/" "s3://$S3_BUCKET/" \
-    --exclude="*" --include="*.html" --include="*.css" \
+    --exclude="*" --include="*.html" --include="*.css" --include="*.js" \
     --cache-control "no-cache" --delete --only-show-errors
 aws s3 sync "$UI_DIR/" "s3://$S3_BUCKET/" \
     --exclude="*" --include="*.jpg" --include="*.jpeg" --include="*.png" --include="*.ico" \

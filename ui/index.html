@@ -3,17 +3,31 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'">
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'">
   <meta name="referrer" content="strict-origin-when-cross-origin">
   <title>Hydra 24</title>
-  <meta name="description" content="Hydra 24 is coming soon.">
-  <link rel="stylesheet" href="styles.css">
+  <meta name="description" content="Hydra 24">
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/common/config.js" defer></script>
+  <script src="/common/carousel.js" defer></script>
 </head>
 <body>
-  <main class="landing">
-    <img class="construction" src="images/construction.png" alt="Website under construction">
-    <p></p>
-    <img class="hero" src="images/hydra24.jpg" alt="Hydra 24 kettlebells">
+  <script src="/common/titlebar.js"></script>
+
+  <main class="page menu-page">
+    <img class="logo" src="/images/hydra-logo-blue.png" alt="Hydra 24">
+    <nav class="menu" aria-label="Main menu">
+      <a href="/profile/profile.html"><img src="/images/buttons/hydralandingmenu/2026_Hydra_24_Buttons_Profile.png" alt="Profiles"></a>
+      <a href="/events/events.html"><img src="/images/buttons/hydralandingmenu/2026_Hydra_24_Buttons_Events.png" alt="Hydra Events"></a>
+      <a href="/series/series.html"><img src="/images/buttons/hydralandingmenu/2026_Hydra_24_Series.png" alt="2027 Series"></a>
+      <a href="/format/format.html"><img src="/images/buttons/hydralandingmenu/2026_Hydra_24_Format.png" alt="Hydra Format"></a>
+    </nav>
+    <!-- Slides come from common/config.js; this first one shows until the script runs. -->
+    <section class="carousel" aria-label="Sponsors" aria-roledescription="carousel">
+      <div class="carousel-track">
+        <img class="carousel-slide is-active" src="/images/carousel/2026_Hydra_24_Space_Holder.png" alt="Sponsor 1">
+      </div>
+    </section>
   </main>
 </body>
 </html>

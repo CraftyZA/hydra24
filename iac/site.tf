@@ -85,7 +85,7 @@ resource "aws_cloudfront_origin_access_control" "hydra24_oac" {
   signing_protocol                  = "sigv4"
 }
 
-# Static page with no scripts, so the CSP can be much tighter than the main site's.
+# Static site that only loads its own scripts, so the CSP can be much tighter than the main site's.
 resource "aws_cloudfront_response_headers_policy" "hydra24_security_headers" {
   name    = "hydra24-security-headers"
   comment = "Security headers for hydra24.co.za"
@@ -112,7 +112,7 @@ resource "aws_cloudfront_response_headers_policy" "hydra24_security_headers" {
     }
 
     content_security_policy {
-      content_security_policy = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+      content_security_policy = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
       override                = true
     }
   }

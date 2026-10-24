@@ -8,7 +8,10 @@ MouseScoring's VPC and Postgres instance to keep AWS costs low.
 - `iac/` - Terraform. Own state: `s3://mousescoring-terraform-state/hydra24/terraform.tfstate`
   (same bucket and DynamoDB lock table as MouseScoring, different key).
 - `backend/` - backend service (not started).
-- `ui/` - static landing page, S3 + CloudFront (OAC).
+- `ui/` - static site, S3 + CloudFront (OAC). Each landing-menu section has its
+  own folder holding its page and sub pages, e.g. `ui/events/events.html`,
+  `ui/events/calendar.html`. Shared JS lives in `ui/common/`. Use root-absolute
+  paths (`/styles.css`, `/images/...`) so pages work at any depth.
 - `docs/` - design notes. Read `docs/shared_infrastructure.md` before touching
   anything network or database related.
 - `deploy.sh` - applies `iac/`, syncs `ui/` to S3, invalidates CloudFront.
@@ -53,3 +56,26 @@ should follow. Read it; don't change it from here.
 - Don't run `sudo`. Give the user the command to run.
 - Don't run `terraform apply` or `deploy.sh` unless asked. `terraform plan`
   is fine.
+
+## Coding standards
+
+- **Mobile first.** Design for a phone screen first, then let it scale up.
+  Pages fit one screen with no scrolling. Content shrinks to fit (see
+  `ui/styles.css`).
+- **DRY / reuse.** Don't repeat code. Before writing something new, look for an
+  existing component, module or Terraform resource pattern and reuse it. Build new
+  ones to be reusable: small, parameterised, no page- or caller-specific
+  assumptions baked in. For example, put shared UI in `ui/common/`.
+- **SOLID** (Robert C. Martin): single responsibility, open/closed, Liskov
+  substitution, interface segregation, dependency inversion.
+- **Clean Code** (Robert C. Martin): intention-revealing names, small functions
+  that do one thing, no side effects hidden behind names, few arguments, no dead
+  or commented-out code, and comments only where the code can't explain itself.
+  Leave code cleaner than you found it.
+- **Security first.**
+  - No secrets in the repo. Use Secrets Manager or SSM.
+  - Give IAM and security groups least privilege.
+  - Validate input at the server. Use parameterised SQL only.
+  - Encode output, with no `innerHTML` for untrusted data.
+  - Verify JWTs in the backend.
+  - Keep dependencies pinned and current.
