@@ -80,6 +80,9 @@
                 <artifactId>maven-surefire-plugin</artifactId>
                 <version>${surefire-plugin.version}</version>
                 <configuration>
+                    <!-- Tests log refused tokens on purpose; keep that out of the build output
+                         (it lands in target/surefire-reports/*-output.txt). Failures still print. -->
+                    <redirectTestOutputToFile>true</redirectTestOutputToFile>
                     <systemPropertyVariables>
                         <java.util.logging.manager>org.jboss.logmanager.LogManager</java.util.logging.manager>
                     </systemPropertyVariables>
