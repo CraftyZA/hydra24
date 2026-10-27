@@ -93,13 +93,10 @@ CONNECT there by default. It has no privileges on the `archery` schema or its
 tables, so it can't read or change anything. Leave the PUBLIC grant on
 `3dscores` alone; revoking it is a MouseScoring change.
 
-Store `hydra24_app`'s password in a Hydra24-owned secret, such as
-`hydra24/rds/app`, not in the MouseScoring secret.
+`hydra24_app`'s password lives only in the Hydra24-owned secret
+`hydra24/rds/app` (Terraform-managed), never in the MouseScoring secret.
 
-The instance is already covered by MouseScoring's AWS Backup plan and
-automated snapshots, so the `hydra24` database is backed up too. Restores are
-instance-wide, which means a point-in-time restore for one product rolls back
-the other unless you restore to a new instance and copy across.
+Backups and restores: see [disaster_recovery.md](disaster_recovery.md).
 
 ## Cognito
 
