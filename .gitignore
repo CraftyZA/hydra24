@@ -3,3 +3,5 @@
 terraform.tfvars
 *.tfstate*
 .DS_Store
+/ui/common/auth-config.js
+backend/target/

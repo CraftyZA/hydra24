@@ -19,10 +19,12 @@ body {
 
 /* Title bar, shared by every page. */
 .titlebar {
+  position: relative; /* anchors the account menu */
   flex: none;
   display: flex;
   align-items: center;
   justify-content: space-between;
+  gap: 16px;
   height: 56px;
   padding: 0 16px;
   background: rgba(0, 0, 0, 0.85);
@@ -50,7 +52,102 @@ body {
 }
 
 .titlebar-user {
+  min-width: 0;
+  white-space: nowrap;
   font-size: 0.95rem;
+}
+
+/* Account menu: "Welcome <email> ▾" opens a menu anchored to the bottom right
+   of the title bar. The email is cut short with "..." on narrow screens. */
+.account-toggle {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  max-width: 100%;
+  padding: 8px 0 8px 4px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.account-toggle-label {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.account-toggle svg {
+  flex: none;
+  color: #1da5ff;
+  transition: transform 0.2s ease;
+}
+
+.account-toggle[aria-expanded="true"] svg {
+  transform: rotate(180deg);
+}
+
+.account-toggle:focus-visible {
+  outline: 2px solid #1da5ff;
+  border-radius: 6px;
+}
+
+.account-menu {
+  position: absolute;
+  top: 100%;
+  right: 8px;
+  z-index: 10;
+  min-width: 160px;
+  padding: 4px 0;
+  background: #0d0d0d;
+  border: 1px solid #1a1a1a;
+  border-top: 0;
+  border-radius: 0 0 8px 8px;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
+}
+
+.account-menu[hidden] {
+  display: none;
+}
+
+.account-menu-item {
+  display: block;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  color: #1da5ff;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.account-menu-item:hover,
+.account-menu-item:focus-visible {
+  background: #1a1a1a;
+  outline: none;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .account-toggle svg { transition: none; }
+}
+
+/* Register / Login in the title bar. */
+.titlebar-link {
+  padding: 8px 4px;
+  border: 0;
+  background: none;
+  color: #1da5ff;
+  font: inherit;
+  cursor: pointer;
+}
+
+.titlebar-link:hover,
+.titlebar-link:focus-visible {
+  text-decoration: underline;
+  outline: none;
 }
 
 /* Everything below the title bar. Children shrink to fit rather than scroll. */

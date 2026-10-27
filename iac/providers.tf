@@ -14,6 +14,14 @@ terraform {
       source  = "hashicorp/aws"
       version = "~> 5.0"
     }
+    http = {
+      source  = "hashicorp/http"
+      version = "~> 3.6"
+    }
+    random = {
+      source  = "hashicorp/random"
+      version = "~> 3.7"
+    }
   }
 
   required_version = ">= 1.7.0" # for_each in import blocks (imports.tf)

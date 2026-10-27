@@ -5,7 +5,8 @@
 #############################################
 
 locals {
-  hydra24_domain = "hydra24.co.za"
+  hydra24_domain  = "hydra24.co.za"
+  hydra24_origins = ["https://${local.hydra24_domain}", "https://www.${local.hydra24_domain}"]
 }
 
 data "aws_route53_zone" "hydra24" {
@@ -86,6 +87,7 @@ resource "aws_cloudfront_origin_access_control" "hydra24_oac" {
 }
 
 # Static site that only loads its own scripts, so the CSP can be much tighter than the main site's.
+# It only talks to itself, the Cognito token endpoint and the API.
 resource "aws_cloudfront_response_headers_policy" "hydra24_security_headers" {
   name    = "hydra24-security-headers"
   comment = "Security headers for hydra24.co.za"
@@ -112,7 +114,7 @@ resource "aws_cloudfront_response_headers_policy" "hydra24_security_headers" {
     }
 
     content_security_policy {
-      content_security_policy = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+      content_security_policy = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self' ${local.auth_url} ${aws_apigatewayv2_api.backend.api_endpoint}; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
       override                = true
     }
   }

@@ -28,10 +28,12 @@ rule list, so a rule added from another state is deleted on the owner's next
 apply. Both shared groups keep their ingress as standalone
 `aws_vpc_security_group_ingress_rule` resources, so Hydra24 can add its own:
 
-| Group                       | Hydra24 adds (owned here)                         |
+| Group                       | Hydra24 adds (owned here, `iac/backend.tf`)       |
 |-----------------------------|---------------------------------------------------|
-| `mousescoring-rds-sg`       | 5432 from the Hydra24 Lambda SG                   |
-| `mousescoring-endpoints-sg` | 443 from the Hydra24 Lambda SG                    |
+| `mousescoring-rds-sg`       | 5432 from `hydra24-lambda-sg`                     |
+| `mousescoring-endpoints-sg` | nothing yet: the backend makes no AWS SDK calls   |
+
+`hydra24-lambda-sg` itself only allows egress to `mousescoring-rds-sg` on 5432.
 
 Keep it that way. Never add an inline `ingress {}` block to either group in
 MouseScoring.
@@ -51,14 +53,40 @@ inside `3dscores`:
   history, extensions and `search_path` never collide.
 - It costs the same as a schema.
 
-One-off setup, run as the master user (credentials in the
-`mousescoring/rds/master` secret):
+### One-off setup
 
-```sql
-CREATE ROLE hydra24_app LOGIN PASSWORD '<generated>';
-CREATE DATABASE hydra24 OWNER hydra24_app;
-REVOKE CONNECT ON DATABASE hydra24 FROM PUBLIC;
-```
+Terraform (`iac/database.tf`) generates `hydra24_app`'s password and stores it
+in the Hydra24-owned secret `hydra24/rds/app`. The database and role have to
+be created once by hand as the master user, because the instance is private.
+Run `terraform apply` first so the secret exists.
+
+1. Get both passwords on your machine:
+   ```bash
+   aws secretsmanager get-secret-value --secret-id mousescoring/rds/master --query SecretString --output text
+   aws secretsmanager get-secret-value --secret-id hydra24/rds/app --query SecretString --output text
+   ```
+2. In the AWS console, open CloudShell, then **Actions > Create VPC environment**:
+   VPC `mousescoring-vpc`, one `mousescoring-private-*` subnet, security group
+   `hydra24-lambda-sg`. That group can already reach Postgres, so nothing
+   shared changes.
+3. Connect as the master user (`username` from the first secret), using the
+   `host` from either secret:
+   ```bash
+   psql "host=<host> dbname=postgres user=<master username> sslmode=require"
+   ```
+4. Run:
+   ```sql
+   CREATE ROLE hydra24_app LOGIN;
+   \password hydra24_app
+   -- paste the password from hydra24/rds/app (twice)
+   GRANT hydra24_app TO CURRENT_USER; -- PG16+: needed to create a database it owns
+   CREATE DATABASE hydra24 OWNER hydra24_app;
+   REVOKE CONNECT ON DATABASE hydra24 FROM PUBLIC;
+   ```
+5. Delete the CloudShell VPC environment.
+
+The backend runs its Flyway migrations (`backend/src/main/resources/db/migration`)
+on cold start, so the tables appear on the first request after this.
 
 `hydra24_app` can still open a connection to `3dscores`, because PUBLIC has
 CONNECT there by default. It has no privileges on the `archery` schema or its
@@ -75,9 +103,11 @@ the other unless you restore to a new instance and copy across.
 
 ## Cognito
 
-Hydra24 gets its own user pool, owned by `iac/` here. Nothing is shared with
-MouseScoring's per-country pools. The existing `cognito-idp` VPC endpoint is
-service-wide, so a VPC Lambda can reach the new pool without changes.
+Hydra24 gets its own user pool, owned by `iac/cognito.tf` here. Nothing is
+shared with MouseScoring's per-country pools. There is no `cognito-idp` VPC
+endpoint (MouseScoring removed it), so the backend never calls Cognito:
+Terraform fetches the pool's signing keys and passes them to the Lambda
+(`iac/jwt_trust.tf`).
 
 ## Moving out later
 
