@@ -17,6 +17,20 @@ body {
   background: #000 url("images/3Di_Background_750x1334_Final_2.jpg") center / contain no-repeat;
 }
 
+/* Phones held sideways are too short to fit a page, so there the page keeps
+   its natural size and scrolls instead of shrinking. */
+@media (orientation: landscape) and (max-height: 500px) {
+  body {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+
+  .page {
+    flex: 1 0 auto;
+  }
+}
+
 /* Title bar, shared by every page. */
 .titlebar {
   position: relative; /* anchors the account menu */
@@ -31,9 +45,11 @@ body {
   border-bottom: 1px solid #1a1a1a;
 }
 
-/* Icon buttons: the title bar's home button and the back button. */
+/* Icon buttons: the title bar's home button, the back button and the social
+   links. */
 .titlebar-home,
-.back-button {
+.back-button,
+.social-link {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -46,7 +62,9 @@ body {
 .titlebar-home:hover,
 .titlebar-home:focus-visible,
 .back-button:hover,
-.back-button:focus-visible {
+.back-button:focus-visible,
+.social-link:hover,
+.social-link:focus-visible {
   background: #111;
   outline: none;
 }
@@ -232,6 +250,14 @@ img.carousel-slide {
 
 @media (prefers-reduced-motion: reduce) {
   .carousel-slide { transition: none; }
+}
+
+/* Row of small social media icons, centred under the carousel. */
+.social {
+  flex: none;
+  display: flex;
+  justify-content: center;
+  gap: 16px;
 }
 
 /* Menu buttons, shrinking together if the screen is short. */

@@ -66,9 +66,14 @@ should follow. Read it; don't change it from here.
 
 ## Coding standards
 
-- **Mobile first.** Design for a phone screen first, then let it scale up.
-  Pages fit one screen with no scrolling. Content shrinks to fit (see
-  `ui/styles.css`).
+- **Mobile first.** The platform is optimised for mobile. Design for a phone
+  screen first, then let it scale up. Test layouts at a range of device sizes
+  (small and large phones, tablet, desktop, portrait and landscape).
+- **No-scroll layout.** Every page fits one screen with no scrolling. The one
+  exception is phones in landscape, where pages may scroll. Content
+  shrinks to fit (see `ui/styles.css`). If a page holds more content than fits
+  comfortably, warn the user that it may need scrolling instead of quietly
+  adding it.
 - **DRY / reuse.** Don't repeat code. Before writing something new, look for an
   existing component, module or Terraform resource pattern and reuse it. Build new
   ones to be reusable: small, parameterised, no page- or caller-specific
