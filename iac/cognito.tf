@@ -79,9 +79,22 @@ resource "aws_cognito_user_pool_domain" "users" {
   user_pool_id = aws_cognito_user_pool.users.id
 }
 
+# Members appear in the ID token's cognito:groups claim; the backend checks it.
+# Add people with: aws cognito-idp admin-add-user-to-group (docs/admin.md).
+resource "aws_cognito_user_group" "admin" {
+  name         = "admin"
+  user_pool_id = aws_cognito_user_pool.users.id
+  description  = "Administrators"
+}
+
 locals {
-  auth_url       = "https://${aws_cognito_user_pool_domain.users.domain}.auth.${var.region}.amazoncognito.com"
+  auth_url      = "https://${aws_cognito_user_pool_domain.users.domain}.auth.${var.region}.amazoncognito.com"
   cognito_issuer = "https://cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.users.id}"
+}
+
+output "user_pool_id" {
+  description = "Cognito user pool id"
+  value       = aws_cognito_user_pool.users.id
 }
 
 output "auth_url" {

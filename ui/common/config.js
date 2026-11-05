@@ -13,3 +13,13 @@ const DEFAULT_CAROUSEL = {
         {image: `${CAROUSEL_BASE_PATH}/2026_Hydra_24_Sponsor_PrimeView.png`, alt: 'Sponsor 3', link: null}
     ]
 };
+
+// ============================================================================
+// SOCIAL MEDIA LINKS (shown by common/social.js)
+// ============================================================================
+
+const SOCIAL_LINKS = {
+    facebook: 'https://www.facebook.com/share/1C13ebSckJ/',
+    instagram: 'https://www.instagram.com/hydra_twenty4',
+    tiktok: 'https://www.tiktok.com/'
+};

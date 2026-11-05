@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Class - Hydra 24</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/common/icon.js"></script>
+  <script src="/common/config.js"></script>
+  <script src="/common/auth-config.js"></script>
+  <script src="/common/auth.js"></script>
+  <script src="/common/dom.js"></script>
+  <script src="/common/api.js"></script>
+  <script src="/common/form.js"></script>
+  <script src="/admin/admin-page.js"></script>
+</head>
+<body>
+  <script src="/common/titlebar.js"></script>
+
+  <main class="page content-page">
+    <div class="page-heading">
+      <h1>Class</h1>
+      <button class="btn btn-small btn-danger" type="button" id="delete" hidden>Delete</button>
+    </div>
+    <p class="status" id="status" role="status" hidden></p>
+
+    <form class="form" id="class-form" hidden>
+      <span class="step-progress" data-step-progress></span>
+
+      <fieldset>
+        <legend>Class details</legend>
+        <label class="field">Name
+          <input name="name" required maxlength="100">
+        </label>
+        <label class="field">Description
+          <input name="description" required maxlength="100">
+        </label>
+        <label class="field">Class type
+          <select name="classType" required></select>
+        </label>
+        <label class="field">Sort order
+          <input name="sortOrder" type="number" required min="0" step="1" value="0">
+        </label>
+        <label class="field field-check">
+          <input name="enabled" type="checkbox" checked>
+          Enabled (can be chosen for new entries)
+        </label>
+      </fieldset>
+
+      <fieldset id="costs">
+        <legend>Entry price</legend>
+        <label class="field">Price (R)
+          <input name="cost" type="number" required min="0" step="0.01">
+        </label>
+        <p class="form-note">Leave an event type blank to charge the price above.</p>
+      </fieldset>
+
+      <div class="form-buttons">
+        <button class="btn btn-secondary" type="button" data-step-back>Back</button>
+        <button class="btn" type="button" data-step-next>Next</button>
+        <button class="btn" type="submit">Save</button>
+      </div>
+    </form>
+
+    <footer class="page-footer">
+      <script src="/common/backbutton.js"></script>
+      <script src="/common/carousel.js"></script>
+    </footer>
+  </main>
+  <script src="/admin/classes/class.js"></script>
+</body>
+</html>

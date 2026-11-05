@@ -5,6 +5,7 @@ set -euo pipefail
 # applies this project's Terraform (iac/), writes the site's auth config from
 # its outputs, uploads ui/ to S3 and invalidates CloudFront.
 #   --skip-build  reuse backend/target/function.zip from the last build
+#   --html        deploy ui/ only: no backend build, no terraform apply
 cd "$(dirname "$0")"
 
 IAC_DIR="iac"
@@ -13,7 +14,13 @@ BACKEND_DIR="backend"
 AUTH_CONFIG_FILE="$UI_DIR/common/auth-config.js"
 
 SKIP_BUILD=false
-[[ "${1:-}" == "--skip-build" ]] && SKIP_BUILD=true
+SKIP_APPLY=false
+case "${1:-}" in
+    "") ;;
+    --skip-build) SKIP_BUILD=true ;;
+    --html) SKIP_BUILD=true; SKIP_APPLY=true ;;
+    *) echo "Usage: $0 [--skip-build | --html]" >&2; exit 1 ;;
+esac
 
 # Step 1: Backend. Tests run first; the native build takes a few minutes.
 if [ "$SKIP_BUILD" = false ]; then
@@ -21,15 +28,20 @@ if [ "$SKIP_BUILD" = false ]; then
     mvn -q -f "$BACKEND_DIR/pom.xml" clean package
     (cd "$BACKEND_DIR/target" && cp function-runner bootstrap && zip -q function.zip bootstrap)
 else
-    echo "Step 1/4: Skipping backend build (--skip-build)"
+    echo "Step 1/4: Skipping backend build"
 fi
 
 # Step 2: Terraform. This project has its own state, so a full apply only ever
-# touches hydra24 resources.
+# touches hydra24 resources. Init still runs when skipping the apply, because
+# the later steps read this project's outputs.
 echo ""
-echo "Step 2/4: Applying hydra24 infrastructure..."
 terraform -chdir="$IAC_DIR" init -input=false > /dev/null
-terraform -chdir="$IAC_DIR" apply -input=false
+if [ "$SKIP_APPLY" = false ]; then
+    echo "Step 2/4: Applying hydra24 infrastructure..."
+    terraform -chdir="$IAC_DIR" apply -input=false
+else
+    echo "Step 2/4: Skipping terraform apply"
+fi
 
 S3_BUCKET=$(terraform -chdir="$IAC_DIR" output -raw hydra24_site_bucket)
 CLOUDFRONT_DIST_ID=$(terraform -chdir="$IAC_DIR" output -raw hydra24_site_distribution_id)

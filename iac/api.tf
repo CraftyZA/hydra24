@@ -10,7 +10,7 @@ resource "aws_apigatewayv2_api" "backend" {
 
   cors_configuration {
     allow_origins = local.hydra24_origins
-    allow_methods = ["PUT"]
+    allow_methods = ["GET", "POST", "PUT", "DELETE"]
     allow_headers = ["Authorization", "Content-Type"]
     max_age       = 300
   }
@@ -25,7 +25,29 @@ resource "aws_apigatewayv2_integration" "backend" {
 
 resource "aws_apigatewayv2_route" "backend" {
   for_each = toset([
+    "GET /api/options",
+    "GET /api/classes",
+    "GET /api/events",
+    "GET /api/events/{id}",
+    "GET /api/events/{id}/classes",
+
     "PUT /api/me",
+    "GET /api/me/profile",
+    "PUT /api/me/profile",
+    "GET /api/me/entries",
+    "GET /api/events/{id}/entry",
+    "PUT /api/events/{id}/entry",
+    "DELETE /api/events/{id}/entry",
+
+    "GET /api/admin/classes",
+    "POST /api/admin/classes",
+    "GET /api/admin/classes/{id}",
+    "PUT /api/admin/classes/{id}",
+    "DELETE /api/admin/classes/{id}",
+    "POST /api/admin/events",
+    "PUT /api/admin/events/{id}",
+    "DELETE /api/admin/events/{id}",
+    "GET /api/admin/events/{id}/entries",
   ])
 
   api_id             = aws_apigatewayv2_api.backend.id

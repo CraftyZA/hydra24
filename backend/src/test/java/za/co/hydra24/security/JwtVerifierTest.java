@@ -14,10 +14,12 @@ import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.Base64;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
@@ -48,7 +50,21 @@ class JwtVerifierTest {
     @Test
     void genuineTokenGivesTheCaller() throws Exception {
         Optional<Caller> caller = verifier.verify(sign(claims(), trustedKeys));
-        assertEquals(Optional.of(new Caller("sub-1", "Ben@Example.com")), caller);
+        assertEquals(Optional.of(new Caller("sub-1", "Ben@Example.com", false)), caller);
+    }
+
+    @Test
+    void adminGroupMakesTheCallerAnAdmin() throws Exception {
+        Map<String, Object> claims = claims();
+        claims.put("cognito:groups", List.of("admin"));
+        assertTrue(verifier.verify(sign(claims, trustedKeys)).orElseThrow().admin());
+    }
+
+    @Test
+    void otherGroupsDoNotMakeTheCallerAnAdmin() throws Exception {
+        Map<String, Object> claims = claims();
+        claims.put("cognito:groups", List.of("administrators"));
+        assertFalse(verifier.verify(sign(claims, trustedKeys)).orElseThrow().admin());
     }
 
     @Test

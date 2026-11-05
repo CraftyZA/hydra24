@@ -4,23 +4,73 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <meta name="referrer" content="strict-origin-when-cross-origin">
-  <title>Profiles - Hydra 24</title>
+  <title>Profile - Hydra 24</title>
   <link rel="stylesheet" href="/styles.css">
   <script src="/common/icon.js"></script>
   <script src="/common/config.js"></script>
   <script src="/common/auth-config.js"></script>
   <script src="/common/auth.js"></script>
+  <script src="/common/dom.js"></script>
+  <script src="/common/api.js"></script>
+  <script src="/common/form.js"></script>
 </head>
 <body>
   <script src="/common/titlebar.js"></script>
 
-  <main class="page placeholder">
-    <h1>Profiles</h1>
-    <p>Coming soon.</p>
+  <main class="page content-page">
+    <div class="page-heading">
+      <h1>My profile</h1>
+      <a class="page-link" href="/profile/entries.html">My entries</a>
+    </div>
+    <p class="status" id="status" role="status" hidden></p>
+
+    <form class="form" id="profile-form" hidden>
+      <span class="step-progress" data-step-progress></span>
+
+      <fieldset>
+        <legend>Personal details</legend>
+        <label class="field">First name
+          <input name="firstName" required maxlength="100" autocomplete="given-name">
+        </label>
+        <label class="field">Last name
+          <input name="lastName" required maxlength="100" autocomplete="family-name">
+        </label>
+        <label class="field">Cellphone
+          <input name="cellphone" type="tel" required pattern="\+?[0-9 ]{9,20}" autocomplete="tel">
+        </label>
+        <label class="field">Date of birth
+          <input name="dateOfBirth" type="date" required autocomplete="bday">
+        </label>
+        <label class="field">Gender
+          <select name="gender" required></select>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Class and emergency contact</legend>
+        <label class="field">Preferred class
+          <select name="preferredClassId"></select>
+        </label>
+        <label class="field">Emergency contact name
+          <input name="emergencyName" required maxlength="100">
+        </label>
+        <label class="field">Emergency contact number
+          <input name="emergencyNo" type="tel" required pattern="\+?[0-9 ]{9,20}">
+        </label>
+      </fieldset>
+
+      <div class="form-buttons">
+        <button class="btn btn-secondary" type="button" data-step-back>Back</button>
+        <button class="btn" type="button" data-step-next>Next</button>
+        <button class="btn" type="submit">Save</button>
+      </div>
+    </form>
+
     <footer class="page-footer">
       <script src="/common/backbutton.js"></script>
       <script src="/common/carousel.js"></script>
     </footer>
   </main>
+  <script src="/profile/profile.js"></script>
 </body>
 </html>

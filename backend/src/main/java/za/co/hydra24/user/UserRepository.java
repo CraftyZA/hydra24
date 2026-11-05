@@ -1,12 +1,9 @@
 package za.co.hydra24.user;
 
-import io.agroal.api.AgroalDataSource;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
+import za.co.hydra24.db.Database;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.UUID;
 
 @ApplicationScoped
@@ -23,17 +20,10 @@ public class UserRepository {
             """;
 
     @Inject
-    AgroalDataSource dataSource;
+    Database database;
 
     /** Creates the user on first sign-in, and stamps the sign-in time after that. */
     public void recordSignIn(UUID cognitoSub, String email) {
-        try (Connection connection = dataSource.getConnection();
-             PreparedStatement statement = connection.prepareStatement(RECORD_SIGN_IN)) {
-            statement.setObject(1, cognitoSub);
-            statement.setString(2, email);
-            statement.executeUpdate();
-        } catch (SQLException e) {
-            throw new IllegalStateException("Could not record sign-in", e);
-        }
+        database.update(RECORD_SIGN_IN, cognitoSub, email);
     }
 }

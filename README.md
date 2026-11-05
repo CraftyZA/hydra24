@@ -6,13 +6,14 @@ and can be moved to its own repository as-is.
 | Folder     | Contents                                                        |
 |------------|-----------------------------------------------------------------|
 | `iac/`     | Terraform, with its own state (`hydra24/terraform.tfstate`)      |
-| `backend/` | Quarkus native Lambda (users, sign-in)                           |
+| `backend/` | Quarkus native Lambda (profiles, classes, events, entries)       |
 | `ui/`      | Static site, served from S3 behind CloudFront                    |
 | `docs/`    | Design notes                                                     |
 
 Deploy with `./deploy.sh`. It builds the backend, applies `iac/`, then syncs
 `ui/` to S3. The first deploy needs the one-off database setup in
-[docs/shared_infrastructure.md](docs/shared_infrastructure.md).
+[docs/shared_infrastructure.md](docs/shared_infrastructure.md). To make someone an
+admin, see [docs/admin.md](docs/admin.md).
 
 ## Relationship to MouseScoring
 

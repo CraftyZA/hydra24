@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Edit event - Hydra 24</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/common/icon.js"></script>
+  <script src="/common/config.js"></script>
+  <script src="/common/auth-config.js"></script>
+  <script src="/common/auth.js"></script>
+  <script src="/common/dom.js"></script>
+  <script src="/common/api.js"></script>
+  <script src="/common/form.js"></script>
+  <script src="/admin/admin-page.js"></script>
+</head>
+<body>
+  <script src="/common/titlebar.js"></script>
+
+  <main class="page content-page">
+    <div class="page-heading">
+      <h1>Event</h1>
+      <a class="page-link" id="entrants" hidden>Entrants</a>
+      <button class="btn btn-small btn-danger" type="button" id="delete" hidden>Delete</button>
+    </div>
+    <p class="status" id="status" role="status" hidden></p>
+
+    <form class="form" id="event-form" hidden>
+      <span class="step-progress" data-step-progress></span>
+
+      <fieldset>
+        <legend>When</legend>
+        <label class="field">Name
+          <input name="name" required maxlength="100">
+        </label>
+        <label class="field">Event type
+          <select name="eventType" required></select>
+        </label>
+        <label class="field">First day
+          <input name="startsOn" type="date" required>
+        </label>
+        <label class="field">Number of days
+          <input name="days" type="number" required min="1" max="30" step="1" value="1">
+        </label>
+        <label class="field">Entries close (optional)
+          <input name="entryClose" type="datetime-local">
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Where</legend>
+        <label class="field">Venue
+          <input name="venueName" required maxlength="100">
+        </label>
+        <label class="field">Address
+          <textarea name="venueAddress" required maxlength="250"></textarea>
+        </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Details (optional)</legend>
+        <label class="field">Itinerary
+          <textarea name="itinerary" maxlength="10000"></textarea>
+        </label>
+        <label class="field">Accommodation
+          <textarea name="accommodation" maxlength="10000"></textarea>
+        </label>
+        <label class="field">Catering
+          <textarea name="catering" maxlength="10000"></textarea>
+        </label>
+      </fieldset>
+
+      <div class="form-buttons">
+        <button class="btn btn-secondary" type="button" data-step-back>Back</button>
+        <button class="btn" type="button" data-step-next>Next</button>
+        <button class="btn" type="submit">Save</button>
+      </div>
+    </form>
+
+    <footer class="page-footer">
+      <script src="/common/backbutton.js"></script>
+      <script src="/common/carousel.js"></script>
+    </footer>
+  </main>
+  <script src="/admin/events/event.js"></script>
+</body>
+</html>
