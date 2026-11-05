@@ -84,7 +84,7 @@ resource "aws_cognito_user_pool_domain" "users" {
 resource "aws_cognito_user_group" "admin" {
   name         = "admin"
   user_pool_id = aws_cognito_user_pool.users.id
-  description  = "Manages classes and events"
+  description  = "Administrators"
 }
 
 locals {
