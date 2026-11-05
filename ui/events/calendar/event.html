@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Event - Hydra 24</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/common/icon.js"></script>
+  <script src="/common/config.js"></script>
+  <script src="/common/auth-config.js"></script>
+  <script src="/common/auth.js"></script>
+  <script src="/common/dom.js"></script>
+  <script src="/common/api.js"></script>
+  <script src="/common/format.js"></script>
+  <script src="/common/form.js"></script>
+</head>
+<body class="scrolling-page">
+  <script src="/common/titlebar.js"></script>
+
+  <main class="page content-page">
+    <div class="page-heading">
+      <h1 id="event-name">Event</h1>
+    </div>
+    <p class="status" id="status" role="status" hidden></p>
+
+    <div class="page-body" id="event" hidden>
+      <section class="panel" id="facts"></section>
+
+      <section class="panel" aria-labelledby="entry-heading">
+        <h2 id="entry-heading">Your entry</h2>
+        <p id="entry-summary"></p>
+        <p class="status" id="entry-status" role="status" hidden></p>
+        <form class="form" id="entry-form" hidden>
+          <label class="field">Class
+            <select name="classId" required></select>
+          </label>
+          <label class="field">Attendance
+            <select name="attendance" required></select>
+          </label>
+          <p class="form-note">No payment is taken on this site.</p>
+          <div class="form-buttons">
+            <button class="btn" type="submit" id="entry-submit">Enter</button>
+            <button class="btn btn-danger" type="button" id="withdraw" hidden>Withdraw</button>
+          </div>
+        </form>
+      </section>
+
+      <div id="long-texts" class="page-body"></div>
+    </div>
+
+    <footer class="page-footer">
+      <script src="/common/backbutton.js"></script>
+      <script src="/common/carousel.js"></script>
+    </footer>
+  </main>
+  <script src="/events/calendar/event.js"></script>
+</body>
+</html>

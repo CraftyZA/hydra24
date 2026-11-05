@@ -11,6 +11,7 @@
     const HOME_ICON_PATH = 'M3 11.5 12 4l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z';
     const CHEVRON_ICON_PATH = 'M7 10l5 5 5-5z';
     const ACCOUNT_MENU_ID = 'account-menu';
+    const ADMIN_ITEM = {label: 'Admin', select: function () { window.location.assign('/admin/admin.html'); }};
 
     function buildHomeLink() {
         const link = document.createElement('a');
@@ -88,13 +89,12 @@
     function buildUserArea() {
         const area = document.createElement('div');
         area.className = 'titlebar-user';
-        Auth.signedInEmail()
-            .catch(function () { return null; })
-            .then(function (email) {
+        Promise.all([Auth.signedInEmail(), Auth.isAdmin()])
+            .catch(function () { return [null, false]; })
+            .then(function ([email, isAdmin]) {
                 if (email) {
-                    area.append(buildAccountMenu(email, [
-                        {label: 'Sign out', select: Auth.signOut}
-                    ]));
+                    const signOut = {label: 'Sign out', select: Auth.signOut};
+                    area.append(buildAccountMenu(email, isAdmin ? [ADMIN_ITEM, signOut] : [signOut]));
                 } else {
                     area.append(buildAuthButton('Register', Auth.register), ' / ', buildAuthButton('Login', Auth.login));
                 }

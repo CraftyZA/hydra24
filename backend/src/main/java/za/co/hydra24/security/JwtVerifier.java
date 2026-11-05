@@ -43,6 +43,9 @@ public class JwtVerifier {
     private static final ObjectMapper MAPPER = new ObjectMapper();
     private static final Base64.Decoder BASE64URL = Base64.getUrlDecoder();
 
+    private static final String GROUPS_CLAIM = "cognito:groups";
+    private static final String ADMIN_GROUP = "admin";
+
     static final long LEEWAY_SECONDS = 60;
 
     private final String issuer;
@@ -68,7 +71,7 @@ public class JwtVerifier {
     public Optional<Caller> verify(String token) {
         try {
             Map<String, Object> claims = verifiedClaims(token);
-            return Optional.of(new Caller((String) claims.get("sub"), (String) claims.get("email")));
+            return Optional.of(new Caller((String) claims.get("sub"), (String) claims.get("email"), isAdmin(claims)));
         } catch (InvalidTokenException e) {
             LOG.warnf("Bearer token refused: %s", e.getMessage());
             return Optional.empty();
@@ -100,6 +103,10 @@ public class JwtVerifier {
         require(Boolean.TRUE.equals(claims.get("email_verified")), "email not verified");
         require(claims.get("sub") instanceof String && claims.get("email") instanceof String, "no sub or email");
         return claims;
+    }
+
+    private static boolean isAdmin(Map<String, Object> claims) {
+        return claims.get(GROUPS_CLAIM) instanceof Collection<?> groups && groups.contains(ADMIN_GROUP);
     }
 
     private boolean audienceMatches(Object aud) {

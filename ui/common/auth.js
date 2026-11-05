@@ -7,6 +7,8 @@
 //   Auth.register(), Auth.login()     go to the hosted sign-up / sign-in page
 //   Auth.completeSignIn(code, state)  on the callback page: code -> tokens
 //   Auth.signedInEmail()              Promise of the user's email, or null
+//   Auth.isAdmin()                    Promise: is the user in the admin group?
+//                                     Only decides what to show: the backend checks.
 //   Auth.callApi(path, options)       fetch from the API with the ID token
 //   Auth.signOut()                    end the session here and on the hosted UI
 //   Auth.forgetTokens()               drop the tokens in this browser only
@@ -17,6 +19,7 @@ const Auth = (function () {
     const PKCE_KEY = 'hydra24.pkce';
     const CALLBACK_PATH = '/auth/callback.html';
     const EXPIRY_MARGIN_MS = 60 * 1000;
+    const ADMIN_GROUP = 'admin';
 
     function redirectUri() {
         return window.location.origin + CALLBACK_PATH;
@@ -154,6 +157,11 @@ const Auth = (function () {
         return tokens ? claims(tokens.idToken).email : null;
     }
 
+    async function isAdmin() {
+        const tokens = await validTokens();
+        return Boolean(tokens) && (claims(tokens.idToken)['cognito:groups'] || []).includes(ADMIN_GROUP);
+    }
+
     async function callApi(path, options) {
         const tokens = await validTokens();
         if (!tokens) throw new Error('You are not signed in.');
@@ -167,6 +175,7 @@ const Auth = (function () {
         login: function () { return goToHostedPage('login'); },
         completeSignIn: completeSignIn,
         signedInEmail: signedInEmail,
+        isAdmin: isAdmin,
         callApi: callApi,
         signOut: signOut,
         forgetTokens: forgetTokens
