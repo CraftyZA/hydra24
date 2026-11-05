@@ -19,7 +19,7 @@ const DEFAULT_CAROUSEL = {
 // ============================================================================
 
 const SOCIAL_LINKS = {
-    facebook: 'https://www.facebook.com/',
-    instagram: 'https://www.instagram.com/',
+    facebook: 'https://www.facebook.com/share/1C13ebSckJ/',
+    instagram: 'https://www.instagram.com/hydra_twenty4',
     tiktok: 'https://www.tiktok.com/'
 };
