@@ -48,3 +48,41 @@ Race and disability are special personal information, so before putting them bac
 - Get someone qualified to check the wording.
 
 If no such need appears, remove them from the API and the table instead.
+
+## POPIA groundwork before real members join
+
+*Parked 2026-11-05, while only developers and product owners are on the system
+and the venue is still being built. Do this before opening sign-up to the public.*
+
+The site already collects personal information: name, email, cellphone, date of
+birth, gender, emergency contact and event entries. These notes are a starting
+list, not legal advice, so get someone qualified to check them.
+
+**Delete a profile.** Nothing can delete one today, neither the member nor an admin.
+
+- Let a member delete their own profile from the profile page.
+- Decide what happens to their event entries, since `entries` references
+  `profiles`. Remove them, or keep anonymised results.
+- Remove the `users` row and the Cognito user too, or they can still sign in.
+- MouseScoring's `delete_user` procedure and `hard_delete_audit` table are a
+  useful reference. Its self-service gap is not.
+
+**Missing policies.** None of these exist on the site yet.
+
+- Privacy policy: what is collected and why, who sees it, how long it is kept, how
+  to correct or delete it, the Information Officer's contact details, and the right
+  to complain to the Information Regulator.
+- Terms and conditions for using the site and entering events.
+- Link both from the site, and have people accept them when they set up a profile
+  or enter an event. Store what was accepted and when.
+
+**Also to decide.**
+
+- Information Officer: name one and check whether they need registering.
+- Retention: how long profiles and entries are kept, and how old ones get removed.
+- Hosting abroad: the Cognito pool and API are in AWS `us-east-1`, so the policy
+  should cover personal information leaving South Africa.
+- Under-18s: date of birth is collected, so decide whether minors can register and
+  how a parent or guardian consents.
+- Emergency contacts: this is someone else's personal information, given without
+  them being asked. The policy should cover it.
