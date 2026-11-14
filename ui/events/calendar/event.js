@@ -9,15 +9,19 @@
     const entryPath = `/api/events/${eventId}/entry`;
 
     function renderFacts(event, typeLabel) {
-        const lines = [
-            `${Format.dateRange(event.startsOn, event.days)} - ${typeLabel}`,
-            event.venueName,
-            event.venueAddress
-        ];
+        const lines = [`${Format.dateRange(event.startsOn, event.days)} - ${typeLabel}`];
         if (event.entryClose) lines.push(`Entries close ${Format.dateTime(event.entryClose)}`);
         document.getElementById('facts').replaceChildren(...lines.map(function (line) {
             return el('p', {class: 'long-text', text: line});
         }));
+    }
+
+    function showImage(event) {
+        if (!event.imagePath) return;
+        const image = document.getElementById('event-image');
+        image.src = event.imagePath;
+        image.alt = event.name;
+        image.hidden = false;
     }
 
     function renderLongTexts(event) {
@@ -107,6 +111,7 @@
         const type = options.eventTypes.find(function (t) { return t.value === event.eventType; });
         document.getElementById('event-name').textContent = event.name;
         document.title = `${event.name} - Hydra 24`;
+        showImage(event);
         renderFacts(event, type.label);
         renderLongTexts(event);
         document.getElementById('event').hidden = false;

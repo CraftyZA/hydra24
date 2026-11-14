@@ -53,6 +53,6 @@ class EventTest {
 
     private static Event event(int days, LocalDateTime entryClose) {
         return new Event(1L, "Test", EventType.HYDRA_24, STARTS_ON, days, entryClose,
-                "Venue", "Address", null, null, null);
+                null, null, null, null);
     }
 }

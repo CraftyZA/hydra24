@@ -87,7 +87,8 @@ resource "aws_cloudfront_origin_access_control" "hydra24_oac" {
 }
 
 # Static site that only loads its own scripts, so the CSP can be much tighter than the main site's.
-# It only talks to itself, the Cognito token endpoint and the API.
+# It only talks to itself, the Cognito token endpoint, the API and (admins
+# uploading event images) the images bucket.
 resource "aws_cloudfront_response_headers_policy" "hydra24_security_headers" {
   name    = "hydra24-security-headers"
   comment = "Security headers for hydra24.co.za"
@@ -114,7 +115,7 @@ resource "aws_cloudfront_response_headers_policy" "hydra24_security_headers" {
     }
 
     content_security_policy {
-      content_security_policy = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self' ${local.auth_url} ${aws_apigatewayv2_api.backend.api_endpoint}; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
+      content_security_policy = "default-src 'self'; img-src 'self'; style-src 'self'; script-src 'self'; connect-src 'self' ${local.auth_url} ${aws_apigatewayv2_api.backend.api_endpoint} ${local.images_upload_origins}; frame-ancestors 'none'; base-uri 'self'; form-action 'none'"
       override                = true
     }
   }
@@ -131,6 +132,35 @@ resource "aws_cloudfront_distribution" "hydra24_site" {
     domain_name              = aws_s3_bucket.hydra24_site.bucket_regional_domain_name
     origin_id                = "s3-hydra24-site"
     origin_access_control_id = aws_cloudfront_origin_access_control.hydra24_oac.id
+  }
+
+  # Event images (iac/images.tf). Same OAC: it is not tied to one bucket.
+  origin {
+    domain_name              = aws_s3_bucket.images.bucket_regional_domain_name
+    origin_id                = "s3-hydra24-images"
+    origin_access_control_id = aws_cloudfront_origin_access_control.hydra24_oac.id
+  }
+
+  # Every upload gets a new key, so an image never changes and can be cached for a year.
+  ordered_cache_behavior {
+    path_pattern               = "/event-images/*"
+    target_origin_id           = "s3-hydra24-images"
+    viewer_protocol_policy     = "redirect-to-https"
+    allowed_methods            = ["GET", "HEAD"]
+    cached_methods             = ["GET", "HEAD"]
+    compress                   = false # already JPEG
+    response_headers_policy_id = aws_cloudfront_response_headers_policy.hydra24_security_headers.id
+
+    min_ttl     = 0
+    default_ttl = 31536000
+    max_ttl     = 31536000
+
+    forwarded_values {
+      query_string = false
+      cookies {
+        forward = "none"
+      }
+    }
   }
 
   default_cache_behavior {

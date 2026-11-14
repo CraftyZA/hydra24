@@ -32,7 +32,7 @@ public class EntryRepository {
     private static final String DELETE = "DELETE FROM entries WHERE event_id = ? AND profile_id = ?";
 
     private static final String LIST_FOR_PROFILE = """
-            SELECT e.event_id, ev.name AS event_name, ev.starts_on, ev.venue_name,
+            SELECT e.event_id, ev.name AS event_name, ev.starts_on,
                    c.name AS class_name, e.attendance, e.cost
               FROM entries e
               JOIN events ev ON ev.id = e.event_id
@@ -78,7 +78,6 @@ public class EntryRepository {
                         row.getLong("event_id"),
                         row.getString("event_name"),
                         row.getObject("starts_on", LocalDate.class),
-                        row.getString("venue_name"),
                         row.getString("class_name"),
                         Attendance.label(row.getString("attendance")),
                         row.getBigDecimal("cost")),

@@ -88,7 +88,7 @@ resource "aws_cognito_user_group" "admin" {
 }
 
 locals {
-  auth_url      = "https://${aws_cognito_user_pool_domain.users.domain}.auth.${var.region}.amazoncognito.com"
+  auth_url       = "https://${aws_cognito_user_pool_domain.users.domain}.auth.${var.region}.amazoncognito.com"
   cognito_issuer = "https://cognito-idp.${var.region}.amazonaws.com/${aws_cognito_user_pool.users.id}"
 }
 

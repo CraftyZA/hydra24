@@ -10,8 +10,7 @@
     function renderEvent(event) {
         return el('a', {class: 'row-card', href: `/events/calendar/event.html?id=${event.id}`},
             el('span', {class: 'row-title', text: event.name}),
-            el('span', {class: 'row-detail', text: `${Format.dateRange(event.startsOn, event.days)} - ${typeLabels[event.eventType]}`}),
-            el('span', {class: 'row-detail', text: event.venueName}));
+            el('span', {class: 'row-detail', text: `${Format.dateRange(event.startsOn, event.days)} - ${typeLabels[event.eventType]}`}));
     }
 
     const list = createPagedList(document.getElementById('events'), renderEvent, 'No events to show.');

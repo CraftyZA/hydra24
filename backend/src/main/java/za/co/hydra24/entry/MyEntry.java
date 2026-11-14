@@ -7,6 +7,6 @@ import java.time.LocalDate;
 
 /** One line in a member's list of their entries. */
 @RegisterForReflection
-public record MyEntry(long eventId, String eventName, LocalDate startsOn, String venueName,
-                      String className, String attendance, BigDecimal cost) {
+public record MyEntry(long eventId, String eventName, LocalDate startsOn, String className,
+                      String attendance, BigDecimal cost) {
 }

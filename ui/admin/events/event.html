@@ -13,6 +13,7 @@
   <script src="/common/dom.js"></script>
   <script src="/common/api.js"></script>
   <script src="/common/form.js"></script>
+  <script src="/common/image-upload.js"></script>
   <script src="/admin/admin-page.js"></script>
 </head>
 <body>
@@ -49,16 +50,6 @@
       </fieldset>
 
       <fieldset>
-        <legend>Where</legend>
-        <label class="field">Venue
-          <input name="venueName" required maxlength="100">
-        </label>
-        <label class="field">Address
-          <textarea name="venueAddress" required maxlength="250"></textarea>
-        </label>
-      </fieldset>
-
-      <fieldset>
         <legend>Details (optional)</legend>
         <label class="field">Itinerary
           <textarea name="itinerary" maxlength="10000"></textarea>
@@ -69,6 +60,16 @@
         <label class="field">Catering
           <textarea name="catering" maxlength="10000"></textarea>
         </label>
+      </fieldset>
+
+      <fieldset>
+        <legend>Image (optional)</legend>
+        <img class="event-image" id="image-preview" alt="Event image" hidden>
+        <p class="form-note" id="image-note">Save the event first, then add an image.</p>
+        <label class="field" id="image-choose" hidden>Choose an image (saved straight away)
+          <input type="file" accept="image/*" id="image-file">
+        </label>
+        <button class="btn btn-small btn-danger" type="button" id="image-remove" hidden>Remove image</button>
       </fieldset>
 
       <div class="form-buttons">

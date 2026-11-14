@@ -1,7 +1,7 @@
 #############################################
 # Backend Lambda (Quarkus native) in MouseScoring's private subnets
-# Same pattern as MouseScoring's lambda.tf. It makes no AWS SDK calls, so the
-# only network access it gets is Postgres.
+# Same pattern as MouseScoring's lambda.tf. Its only network access is Postgres
+# and S3 for event images (iac/images.tf).
 #############################################
 
 locals {
@@ -78,6 +78,8 @@ resource "aws_lambda_function" "backend" {
       AUTH_JWT_ISSUER   = local.cognito_issuer
       AUTH_JWT_AUDIENCE = aws_cognito_user_pool_client.web.id
       AUTH_JWT_KEYS     = local.cognito_signing_keys
+
+      IMAGES_BUCKET = aws_s3_bucket.images.bucket
 
       # Recommended for Quarkus native images on Lambda.
       DISABLE_SIGNAL_HANDLERS = "true"

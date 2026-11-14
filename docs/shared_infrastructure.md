@@ -31,9 +31,14 @@ apply. Both shared groups keep their ingress as standalone
 | Group                       | Hydra24 adds (owned here, `iac/backend.tf`)       |
 |-----------------------------|---------------------------------------------------|
 | `mousescoring-rds-sg`       | 5432 from `hydra24-lambda-sg`                     |
-| `mousescoring-endpoints-sg` | nothing yet: the backend makes no AWS SDK calls   |
+| `mousescoring-endpoints-sg` | nothing yet: the backend uses no interface endpoints |
 
-`hydra24-lambda-sg` itself only allows egress to `mousescoring-rds-sg` on 5432.
+`hydra24-lambda-sg` itself only allows egress to `mousescoring-rds-sg` on 5432, and
+443 to the S3 prefix list. The backend reaches S3 (event images, `iac/images.tf`)
+through MouseScoring's S3 **gateway** endpoint, which is on the private route table
+and needs no security group. If MouseScoring ever removes that endpoint or narrows
+its policy, deleting replaced event images stops working (uploads still work: they
+go from the browser straight to S3).
 
 Keep it that way. Never add an inline `ingress {}` block to either group in
 MouseScoring.

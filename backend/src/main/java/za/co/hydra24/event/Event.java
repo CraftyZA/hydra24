@@ -14,7 +14,10 @@ import java.time.LocalDateTime;
 import java.time.ZoneId;
 import java.util.List;
 
-/** An event on the calendar. Sent and received as is; an id in a request is ignored. */
+/**
+ * An event on the calendar. Sent and received as is. An id or imagePath in a request
+ * is ignored: the image is set through {@link EventImageAdminResource}.
+ */
 @RegisterForReflection
 public record Event(
         Long id,
@@ -23,11 +26,10 @@ public record Event(
         @NotNull LocalDate startsOn,
         @NotNull @Min(1) @Max(30) Integer days,
         LocalDateTime entryClose,
-        @NotBlank @Size(max = 100) String venueName,
-        @NotBlank @Size(max = 250) String venueAddress,
         @Size(max = 10000) String itinerary,
         @Size(max = 10000) String accommodation,
-        @Size(max = 10000) String catering) {
+        @Size(max = 10000) String catering,
+        String imagePath) {
 
     private static final ZoneId EVENT_ZONE = ZoneId.of("Africa/Johannesburg");
 

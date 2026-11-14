@@ -24,6 +24,9 @@ public class EventAdminResource {
     @Inject
     EventRepository events;
 
+    @Inject
+    EventImages images;
+
     @POST
     public Event create(@Valid Event event) {
         return events.find(events.create(event)).orElseThrow();
@@ -40,12 +43,16 @@ public class EventAdminResource {
     @DELETE
     @Path("/{id}")
     public void delete(@PathParam("id") long id) {
+        String imageKey = events.findImageKey(id).orElse(null);
         try {
             if (!events.delete(id)) {
                 throw new NotFoundException();
             }
         } catch (ForeignKeyViolationException e) {
             throw ApiErrors.conflict("This event has entries, so it cannot be deleted.");
+        }
+        if (imageKey != null) {
+            images.delete(imageKey);
         }
     }
 }
