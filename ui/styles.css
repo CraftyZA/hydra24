@@ -548,6 +548,10 @@ img.carousel-slide {
   outline: none;
 }
 
+.field[hidden] {
+  display: none;
+}
+
 .field-check {
   flex-direction: row;
   align-items: center;
