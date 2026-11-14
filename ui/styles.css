@@ -562,6 +562,7 @@ img.carousel-slide {
 }
 
 .form-note {
+  width: 100%; /* .page centres its children */
   margin: 0;
   font-size: 0.85rem;
   color: #bbb;
