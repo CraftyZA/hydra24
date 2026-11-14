@@ -50,7 +50,7 @@ body.scrolling-page .page {
 
 /* Title bar, shared by every page. */
 .titlebar {
-  position: relative; /* anchors the account menu */
+  position: relative; /* anchors the title bar menus */
   flex: none;
   display: flex;
   align-items: center;
@@ -128,10 +128,11 @@ body.scrolling-page .page {
   border-radius: 6px;
 }
 
-.account-menu {
+/* Title bar menus (common/titlebar.js), anchored under the bar: the account
+   menu on the right, the admin burger menu on the left. */
+.titlebar-menu {
   position: absolute;
   top: 100%;
-  right: 8px;
   z-index: 10;
   min-width: 160px;
   padding: 4px 0;
@@ -142,12 +143,21 @@ body.scrolling-page .page {
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.6);
 }
 
-.account-menu[hidden] {
+.titlebar-menu[hidden] {
   display: none;
 }
 
-.account-menu-item {
-  display: block;
+.account-menu {
+  right: 8px;
+}
+
+.admin-menu {
+  left: 8px;
+}
+
+.titlebar-menu-item {
+  display: flex;
+  align-items: center;
   width: 100%;
   min-height: 44px;
   padding: 0 16px;
@@ -156,13 +166,47 @@ body.scrolling-page .page {
   color: #1da5ff;
   font: inherit;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
 }
 
-.account-menu-item:hover,
-.account-menu-item:focus-visible {
+.titlebar-menu-item:hover,
+.titlebar-menu-item:focus-visible {
   background: #1a1a1a;
   outline: none;
+}
+
+/* Burger button and home button, left of the account menu. */
+.titlebar-start {
+  flex: none;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.burger-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 40px;
+  height: 40px;
+  padding: 0;
+  border: 0;
+  border-radius: 8px;
+  background: none;
+  color: #1da5ff;
+  cursor: pointer;
+}
+
+.burger-toggle:hover,
+.burger-toggle:focus-visible {
+  background: #111;
+  outline: none;
+}
+
+.burger-toggle[aria-expanded="false"] .burger-close-icon,
+.burger-toggle[aria-expanded="true"] .burger-open-icon {
+  display: none;
 }
 
 @media (prefers-reduced-motion: reduce) {

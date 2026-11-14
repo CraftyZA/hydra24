@@ -48,6 +48,11 @@ resource "aws_apigatewayv2_route" "backend" {
     "PUT /api/admin/events/{id}",
     "DELETE /api/admin/events/{id}",
     "GET /api/admin/events/{id}/entries",
+    "GET /api/admin/members",
+    "GET /api/admin/members/{id}",
+    "GET /api/admin/members/{id}/profile",
+    "PUT /api/admin/members/{id}/profile",
+    "GET /api/admin/members/{id}/entries",
   ])
 
   api_id             = aws_apigatewayv2_api.backend.id

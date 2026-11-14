@@ -1,0 +1,42 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="referrer" content="strict-origin-when-cross-origin">
+  <title>Members - Hydra 24</title>
+  <link rel="stylesheet" href="/styles.css">
+  <script src="/common/icon.js"></script>
+  <script src="/common/config.js"></script>
+  <script src="/common/auth-config.js"></script>
+  <script src="/common/auth.js"></script>
+  <script src="/common/dom.js"></script>
+  <script src="/common/api.js"></script>
+  <script src="/common/form.js"></script>
+  <script src="/common/paged-list.js"></script>
+  <script src="/admin/admin-page.js"></script>
+  <script src="/admin/members/member-text.js"></script>
+</head>
+<body>
+  <script src="/common/titlebar.js"></script>
+
+  <main class="page content-page">
+    <div class="page-heading">
+      <h1 id="heading">Members</h1>
+    </div>
+    <div class="filters">
+      <label class="field">Search
+        <input id="search" type="search" placeholder="Name, email or member no." autocomplete="off">
+      </label>
+    </div>
+    <p class="status" id="status" role="status" hidden></p>
+    <div class="paged-list" id="members"></div>
+
+    <footer class="page-footer">
+      <script src="/common/backbutton.js"></script>
+      <script src="/common/carousel.js"></script>
+    </footer>
+  </main>
+  <script src="/admin/members/members.js"></script>
+</body>
+</html>

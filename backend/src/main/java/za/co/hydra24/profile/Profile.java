@@ -29,6 +29,12 @@ public record Profile(
     private static final String PHONE = "\\+?[0-9 ]{9,20}";
     private static final String PHONE_MESSAGE = "must be a phone number";
 
+    /** This profile without the ID number, race and disability, for showing to someone else. */
+    public Profile withoutSpecialInformation() {
+        return new Profile(firstName, lastName, cellphone, dateOfBirth, gender, preferredClassId,
+                emergencyName, emergencyNo, null, null, null);
+    }
+
     @JsonIgnore
     @AssertTrue(message = "must be a valid South African ID number")
     public boolean isIdNumberValid() {

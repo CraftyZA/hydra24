@@ -13,13 +13,15 @@ import java.util.UUID;
 @ApplicationScoped
 public class ProfileRepository {
 
-    private static final String FIND = """
+    private static final String SELECT = """
             SELECT p.first_name, p.last_name, p.cellphone, p.date_of_birth, p.gender, p.preferred_class_id,
                    p.emergency_name, p.emergency_no, p.id_number, p.race, p.disability
               FROM profiles p
-              JOIN users u ON u.id = p.user_id
-             WHERE u.cognito_sub = ?
             """;
+
+    private static final String FIND = SELECT + " JOIN users u ON u.id = p.user_id WHERE u.cognito_sub = ?";
+
+    private static final String FIND_BY_USER_ID = SELECT + " WHERE p.user_id = ?";
 
     private static final String FIND_ID = """
             SELECT p.id
@@ -47,11 +49,23 @@ public class ProfileRepository {
                    updated_at = now()
             """;
 
+    // Leaves out the special personal information, which only the member gives.
+    private static final String UPDATE_BY_USER_ID = """
+            UPDATE profiles
+               SET first_name = ?, last_name = ?, cellphone = ?, date_of_birth = ?, gender = ?,
+                   preferred_class_id = ?, emergency_name = ?, emergency_no = ?, updated_at = now()
+             WHERE user_id = ?
+            """;
+
     @Inject
     Database database;
 
     public Optional<Profile> find(UUID cognitoSub) {
         return database.queryOne(FIND, ProfileRepository::toProfile, cognitoSub);
+    }
+
+    public Optional<Profile> findByUserId(long userId) {
+        return database.queryOne(FIND_BY_USER_ID, ProfileRepository::toProfile, userId);
     }
 
     public Optional<Long> findId(UUID cognitoSub) {
@@ -64,6 +78,17 @@ public class ProfileRepository {
                 Database.enumName(profile.gender()), profile.preferredClassId(),
                 profile.emergencyName(), profile.emergencyNo(), profile.idNumber(),
                 Database.enumName(profile.race()), Database.enumName(profile.disability()));
+    }
+
+    /**
+     * An admin's change to someone else's profile. Leaves the ID number, race and
+     * disability as they are. False when the user has no profile.
+     */
+    public boolean updateByUserId(long userId, Profile profile) {
+        return database.update(UPDATE_BY_USER_ID,
+                profile.firstName(), profile.lastName(), profile.cellphone(), profile.dateOfBirth(),
+                Database.enumName(profile.gender()), profile.preferredClassId(),
+                profile.emergencyName(), profile.emergencyNo(), userId) > 0;
     }
 
     private static Profile toProfile(ResultSet row) throws SQLException {

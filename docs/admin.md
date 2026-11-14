@@ -1,9 +1,11 @@
 # Admins
 
-An admin can manage classes and events and see who has entered an event. It is
-membership of the `admin` group in the Hydra24 Cognito pool (`iac/cognito.tf`). The
-backend reads the group from the verified ID token, so every `/api/admin` route is
-protected whatever the site shows.
+An admin can manage classes and events, see who has entered an event, and look up
+members: their profile, which they can correct, and their entries. The ID number,
+race and disability never reach the admin pages. Admins get these pages from the
+burger menu in the title bar. Being an admin is membership of the `admin` group in
+the Hydra24 Cognito pool (`iac/cognito.tf`). The backend reads the group from the
+verified ID token, so every `/api/admin` route is protected whatever the site shows.
 
 The person must have registered first. To add them:
 
